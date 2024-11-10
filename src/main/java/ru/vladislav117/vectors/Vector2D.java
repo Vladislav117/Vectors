@@ -447,4 +447,36 @@ public class Vector2D implements Vector {
     public double angleDegrees() {
         return Math.toDegrees(angle());
     }
+
+    // TODO 10.11.2024: При расчёте угла от вектора (1, 1) до вектора (100, 1) угол рассчитывается как 360°, а не 0°
+
+    /**
+     * Вычисление угла поворота до другого вектора в радианах.
+     *
+     * @param vector Вектор, поворот до которого будет рассчитан
+     * @return Угол поворота до вектора в радианах.
+     * @see Vector2D#angleDegreesTo(Vector)
+     */
+    public double angleTo(Vector vector) {
+        if (vector.getSize() == SIZE) {
+            Vector2D difference = clone().subtract(vector);
+            return Math.PI + Math.atan2(difference.getY(), difference.getX());
+        }
+        throw new VectorSizeIncompatibilityError(this, vector);
+    }
+
+    /**
+     * Вычисление угла поворота до другого вектора в градусах.
+     *
+     * @param vector Вектор, поворот до которого будет рассчитан
+     * @return Угол поворота до вектора в градусах.
+     * @see Vector2D#angleTo(Vector)
+     */
+    public double angleDegreesTo(Vector vector) {
+        if (vector.getSize() == SIZE) {
+            Vector2D difference = clone().subtract(vector);
+            return 180 + Math.toDegrees(Math.atan2(difference.getY(), difference.getX()));
+        }
+        throw new VectorSizeIncompatibilityError(this, vector);
+    }
 }
