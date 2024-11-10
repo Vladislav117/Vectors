@@ -165,5 +165,33 @@ public class Vector2DTests {
         Assertions.assertEquals(vector.distance(new Vector2D()), Math.sqrt(5));
         Assertions.assertEquals(vector.distance(new Vector2D(1, 2)), 0);
         Assertions.assertEquals(vector.distance(new Vector2D(3, 4)), Math.sqrt(8));
+
+        vector = new Vector2D(1, 1);
+        Assertions.assertEquals(vector.toAngle(), Math.PI / 4);
+        Assertions.assertEquals(vector.toAngleDegrees(), 45);
+
+        vector = new Vector2D(-1, 1);
+        Assertions.assertEquals(vector.toAngle(), 3 * Math.PI / 4);
+        Assertions.assertEquals(vector.toAngleDegrees(), 135);
+
+        vector = new Vector2D(-1, -1);
+        Assertions.assertEquals(vector.toAngle(), 5 * Math.PI / 4);
+        Assertions.assertEquals(vector.toAngleDegrees(), 225);
+
+        vector = new Vector2D(1, -1);
+        Assertions.assertEquals(vector.toAngle(), 7 * Math.PI / 4);
+        Assertions.assertEquals(vector.toAngleDegrees(), 315);
+
+        vector = new Vector2D(0, 0);
+        Assertions.assertEquals(vector.toAngle(), 0);
+        Assertions.assertEquals(vector.toAngleDegrees(), 0);
+
+        vector = new Vector2D(0, 1);
+        Assertions.assertEquals(vector.toAngle(), Math.PI / 2);
+        Assertions.assertEquals(vector.toAngleDegrees(), 90);
+
+        vector = new Vector2D(0, -1);
+        Assertions.assertEquals(vector.toAngle(), 3 * Math.PI / 2);
+        Assertions.assertEquals(vector.toAngleDegrees(), 270);
     }
 }

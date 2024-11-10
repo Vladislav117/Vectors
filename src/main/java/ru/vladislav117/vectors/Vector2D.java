@@ -421,4 +421,30 @@ public class Vector2D implements Vector {
         }
         throw new VectorSizeIncompatibilityError(this, vector);
     }
+
+    /**
+     * Вычисление угла вектора в радианах.
+     * В отличие от метода {@link Math#atan2(double, double)},
+     * этот метод возвращает радианы по всей окружности, от 0 до 2π.
+     *
+     * @return Угол вектора в радианах.
+     * @see Vector2D#toAngleDegrees()
+     */
+    public double toAngle() {
+        double angle = Math.atan2(y, x);
+        if (angle >= 0) return angle;
+        return Math.TAU + angle;
+    }
+
+    /**
+     * Вычисление угла вектора в градусах.
+     * В отличие от метода {@link Math#atan2(double, double)},
+     * этот метод возвращает градусы по всей окружности, от 0 до 360.
+     *
+     * @return Угол вектора в градусах.
+     * @see Vector2D#toAngle()
+     */
+    public double toAngleDegrees() {
+        return Math.toDegrees(toAngle());
+    }
 }
