@@ -167,31 +167,31 @@ public class Vector2DTests {
         Assertions.assertEquals(vector.distance(new Vector2D(3, 4)), Math.sqrt(8));
 
         vector = new Vector2D(1, 1);
-        Assertions.assertEquals(vector.toAngle(), Math.PI / 4);
-        Assertions.assertEquals(vector.toAngleDegrees(), 45);
+        Assertions.assertEquals(vector.angle(), Math.PI / 4);
+        Assertions.assertEquals(vector.angleDegrees(), 45);
 
         vector = new Vector2D(-1, 1);
-        Assertions.assertEquals(vector.toAngle(), 3 * Math.PI / 4);
-        Assertions.assertEquals(vector.toAngleDegrees(), 135);
+        Assertions.assertEquals(vector.angle(), 3 * Math.PI / 4);
+        Assertions.assertEquals(vector.angleDegrees(), 135);
 
         vector = new Vector2D(-1, -1);
-        Assertions.assertEquals(vector.toAngle(), 5 * Math.PI / 4);
-        Assertions.assertEquals(vector.toAngleDegrees(), 225);
+        Assertions.assertEquals(vector.angle(), 5 * Math.PI / 4);
+        Assertions.assertEquals(vector.angleDegrees(), 225);
 
         vector = new Vector2D(1, -1);
-        Assertions.assertEquals(vector.toAngle(), 7 * Math.PI / 4);
-        Assertions.assertEquals(vector.toAngleDegrees(), 315);
+        Assertions.assertEquals(vector.angle(), 7 * Math.PI / 4);
+        Assertions.assertEquals(vector.angleDegrees(), 315);
 
         vector = new Vector2D(0, 0);
-        Assertions.assertEquals(vector.toAngle(), 0);
-        Assertions.assertEquals(vector.toAngleDegrees(), 0);
+        Assertions.assertEquals(vector.angle(), 0);
+        Assertions.assertEquals(vector.angleDegrees(), 0);
 
         vector = new Vector2D(0, 1);
-        Assertions.assertEquals(vector.toAngle(), Math.PI / 2);
-        Assertions.assertEquals(vector.toAngleDegrees(), 90);
+        Assertions.assertEquals(vector.angle(), Math.PI / 2);
+        Assertions.assertEquals(vector.angleDegrees(), 90);
 
         vector = new Vector2D(0, -1);
-        Assertions.assertEquals(vector.toAngle(), 3 * Math.PI / 2);
-        Assertions.assertEquals(vector.toAngleDegrees(), 270);
+        Assertions.assertEquals(vector.angle(), 3 * Math.PI / 2);
+        Assertions.assertEquals(vector.angleDegrees(), 270);
     }
 }

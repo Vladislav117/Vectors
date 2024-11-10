@@ -428,9 +428,9 @@ public class Vector2D implements Vector {
      * этот метод возвращает радианы по всей окружности, от 0 до 2π.
      *
      * @return Угол вектора в радианах.
-     * @see Vector2D#toAngleDegrees()
+     * @see Vector2D#angleDegrees()
      */
-    public double toAngle() {
+    public double angle() {
         double angle = Math.atan2(y, x);
         if (angle >= 0) return angle;
         return Math.TAU + angle;
@@ -442,9 +442,9 @@ public class Vector2D implements Vector {
      * этот метод возвращает градусы по всей окружности, от 0 до 360.
      *
      * @return Угол вектора в градусах.
-     * @see Vector2D#toAngle()
+     * @see Vector2D#angle()
      */
-    public double toAngleDegrees() {
-        return Math.toDegrees(toAngle());
+    public double angleDegrees() {
+        return Math.toDegrees(angle());
     }
 }
