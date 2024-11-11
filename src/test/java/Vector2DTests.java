@@ -230,5 +230,20 @@ public class Vector2DTests {
         other = new Vector2D(100, 1);
         Assertions.assertEquals(vector.angleTo(other), Math.PI * 2);
         Assertions.assertEquals(vector.angleDegreesTo(other), 360);
+
+        vector = new Vector2D(1, 1);
+        other = new Vector2D(2, 2);
+        Assertions.assertEquals(vector.directionTo(other).getX(), 1 / Math.sqrt(2));
+        Assertions.assertEquals(vector.directionTo(other).getY(), 1 / Math.sqrt(2));
+
+        vector = new Vector2D(1, 1);
+        other = new Vector2D(1, 2);
+        Assertions.assertEquals(vector.directionTo(other).getX(), 0);
+        Assertions.assertEquals(vector.directionTo(other).getY(), 1);
+
+        vector = new Vector2D(1, 1);
+        other = new Vector2D(3, 1);
+        Assertions.assertEquals(vector.vectorTo(other).getX(), 2);
+        Assertions.assertEquals(vector.vectorTo(other).getY(), 0);
     }
 }

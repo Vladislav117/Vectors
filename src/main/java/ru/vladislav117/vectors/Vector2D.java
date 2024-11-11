@@ -479,4 +479,33 @@ public class Vector2D implements Vector {
         }
         throw new VectorSizeIncompatibilityError(this, vector);
     }
+
+    /**
+     * Вычисление направления до вектора.
+     * Представляет собой следующий алгоритм: из целевого вектора вычитается текущий,
+     * затем результат нормализуется.
+     *
+     * @param vector Целевой вектор
+     * @return Направление до вектора.
+     */
+    public Vector2D directionTo(Vector vector) {
+        if (vector.getSize() == SIZE) {
+            return new Vector2D(vector.getAxis(Axis.X_INDEX) - x, vector.getAxis(Axis.Y_INDEX) - y).normalize();
+        }
+        throw new VectorSizeIncompatibilityError(this, vector);
+    }
+
+    /**
+     * Вычисление вектора до целевого вектора.
+     * Представляет собой следующий алгоритм: из целевого вектора вычитается текущий.
+     *
+     * @param vector Целевой вектор.
+     * @return Вектор до целевого вектора.
+     */
+    public Vector2D vectorTo(Vector vector) {
+        if (vector.getSize() == SIZE) {
+            return new Vector2D(vector.getAxis(Axis.X_INDEX) - x, vector.getAxis(Axis.Y_INDEX) - y);
+        }
+        throw new VectorSizeIncompatibilityError(this, vector);
+    }
 }
