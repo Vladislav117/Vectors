@@ -67,6 +67,50 @@ public class Vector2D implements Vector {
         }
     }
 
+    /**
+     * Создание вектора из угла и длины.
+     *
+     * @param angle  Угол в радианах
+     * @param length Длина
+     * @return Созданный вектор.
+     */
+    public static Vector2D fromAngle(double angle, double length) {
+        return new Vector2D(Math.cos(angle) * length, Math.sin(angle) * length);
+    }
+
+    /**
+     * Создание вектора из угла с единичной длиной.
+     *
+     * @param angle Угол в радианах
+     * @return Созданный вектор.
+     */
+    public static Vector2D fromAngle(double angle) {
+        return new Vector2D(Math.cos(angle), Math.sin(angle));
+    }
+
+    /**
+     * Создание вектора из угла и длины.
+     *
+     * @param angle  Угол в градусах
+     * @param length Длина
+     * @return Созданный вектор.
+     */
+    public static Vector2D fromAngleDegrees(double angle, double length) {
+        angle = Math.toRadians(angle);
+        return new Vector2D(Math.cos(angle) * length, Math.sin(angle) * length);
+    }
+
+    /**
+     * Создание вектора из угла с единичной длиной.
+     *
+     * @param angle Угол в градусах
+     * @return Созданный вектор.
+     */
+    public static Vector2D fromAngleDegrees(double angle) {
+        angle = Math.toRadians(angle);
+        return new Vector2D(Math.cos(angle), Math.sin(angle));
+    }
+
     @Override
     public int getSize() {
         return SIZE;

@@ -4,7 +4,20 @@ import ru.vladislav117.vectors.Axis;
 import ru.vladislav117.vectors.Vector2D;
 
 public class Vector2DTests {
+    public static final double zeroApprox = 1E-15;
+    public static final double accuracy = Math.pow(10, 9);
+
+    protected double round(double number) {
+        return ((int) number * accuracy) / accuracy;
+    }
+
     protected void assertVector(Vector2D vector, double x, double y) {
+        if (0 < vector.getX() && vector.getX() < zeroApprox) vector.setX(0);
+        if (0 < vector.getY() && vector.getY() < zeroApprox) vector.setY(0);
+        vector.setX(round(vector.getX()));
+        vector.setY(round(vector.getY()));
+        x = round(x);
+        y = round(y);
         Assertions.assertEquals(vector.getX(), x);
         Assertions.assertEquals(vector.getY(), y);
     }
@@ -24,6 +37,18 @@ public class Vector2DTests {
 
         vector = new Vector2D();
         assertVector(vector, 0, 0);
+
+        vector = Vector2D.fromAngle(Math.PI / 2, 2);
+        assertVector(vector, 0, 2);
+
+        vector = Vector2D.fromAngle(Math.PI);
+        assertVector(vector, -1, 0);
+
+        vector = Vector2D.fromAngleDegrees(45, 2);
+        assertVector(vector, Math.sqrt(2), Math.sqrt(2));
+
+        vector = Vector2D.fromAngleDegrees(-90);
+        assertVector(vector, 0, -1);
     }
 
     @Test
