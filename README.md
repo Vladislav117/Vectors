@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.Vladislav117:Vectors:v1.0.2'
+    implementation 'com.github.Vladislav117:Vectors:v1.0.3'
 }
 ```
 
