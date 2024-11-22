@@ -5,13 +5,13 @@ import ru.vladislav117.vectors.error.VectorIndexError;
 import java.util.Objects;
 
 /**
- * Вектор в трёхмерном пространстве.
+ * Вектор в пятимерном пространстве.
  */
-public class Vector3D implements Vector {
+public class Vector5D implements Vector {
     /**
      * Размер вектора.
      */
-    public static final int SIZE = 3;
+    public static final int SIZE = 5;
     /**
      * Значение по оси абсцисс (x).
      */
@@ -24,54 +24,74 @@ public class Vector3D implements Vector {
      * Значение по оси аппликат (z).
      */
     protected double z;
+    /**
+     * Значение по оси w.
+     */
+    protected double w;
+    /**
+     * Значение по оси v.
+     */
+    protected double v;
 
     /**
-     * Создание трёхмерного вектора.
+     * Создание пятимерного вектора.
      *
      * @param x Значение по оси абсцисс (x)
      * @param y Значение по оси ординат (y)
      * @param z Значение по оси аппликат (z)
+     * @param w Значение по оси w
+     * @param v Значение по оси v
      */
-    public Vector3D(double x, double y, double z) {
+    public Vector5D(double x, double y, double z, double w, double v) {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.w = w;
+        this.v = v;
     }
 
     /**
-     * Создание трёхмерного вектора на основе другого вектора.
+     * Создание пятимерного вектора на основе другого вектора.
      * Если у векторов совпадают не все индексы значений, то значения по таким индексам будут взяты за 0.
      *
      * @param vector Вектор, значения по осям которого будут взяты
      */
-    public Vector3D(Vector vector) {
-        if (vector instanceof Vector3D vector3D) {
-            x = vector3D.x;
-            y = vector3D.y;
-            z = vector3D.z;
+    public Vector5D(Vector vector) {
+        if (vector instanceof Vector5D vector5D) {
+            x = vector5D.x;
+            y = vector5D.y;
+            z = vector5D.z;
+            w = vector5D.w;
+            v = vector5D.v;
             return;
         }
         x = vector.getIndexOrZero(Axis.X_INDEX);
         y = vector.getIndexOrZero(Axis.Y_INDEX);
         z = vector.getIndexOrZero(Axis.Z_INDEX);
+        w = vector.getIndexOrZero(Axis.W_INDEX);
+        v = vector.getIndexOrZero(Axis.V_INDEX);
     }
 
     /**
-     * Создание трёхмерного вектора с нулевыми значениями.
+     * Создание пятимерного вектора с нулевыми значениями.
      */
-    public Vector3D() {
+    public Vector5D() {
         x = 0;
         y = 0;
         z = 0;
+        w = 0;
+        v = 0;
     }
 
     @Override
-    public Vector3D clone() {
+    public Vector5D clone() {
         try {
-            Vector3D cloned = (Vector3D) super.clone();
+            Vector5D cloned = (Vector5D) super.clone();
             cloned.x = x;
             cloned.y = y;
             cloned.z = z;
+            cloned.w = w;
+            cloned.v = v;
             return cloned;
         } catch (CloneNotSupportedException exception) {
             throw new RuntimeException(exception);
@@ -85,7 +105,7 @@ public class Vector3D implements Vector {
 
     @Override
     public boolean containsIndex(int index) {
-        return index == Axis.X_INDEX || index == Axis.Y_INDEX || index == Axis.Z_INDEX;
+        return index == Axis.X_INDEX || index == Axis.Y_INDEX || index == Axis.Z_INDEX || index == Axis.W_INDEX || index == Axis.V_INDEX;
     }
 
     /**
@@ -115,12 +135,32 @@ public class Vector3D implements Vector {
         return z;
     }
 
+    /**
+     * Получение значения по оси w.
+     *
+     * @return Значение по оси w.
+     */
+    public double getW() {
+        return w;
+    }
+
+    /**
+     * Получение значения по оси v.
+     *
+     * @return Значение по оси v.
+     */
+    public double getV() {
+        return v;
+    }
+
     @Override
     public double getIndex(int index) {
         return switch (index) {
             case Axis.X_INDEX -> x;
             case Axis.Y_INDEX -> y;
             case Axis.Z_INDEX -> z;
+            case Axis.W_INDEX -> w;
+            case Axis.V_INDEX -> v;
             default -> throw new VectorIndexError(index);
         };
     }
@@ -131,6 +171,8 @@ public class Vector3D implements Vector {
             case Axis.X_INDEX -> x;
             case Axis.Y_INDEX -> y;
             case Axis.Z_INDEX -> z;
+            case Axis.W_INDEX -> w;
+            case Axis.V_INDEX -> v;
             default -> 0;
         };
     }
@@ -141,7 +183,7 @@ public class Vector3D implements Vector {
      * @param x Значение по оси абсцисс (x)
      * @return Этот же вектор.
      */
-    public Vector3D setX(double x) {
+    public Vector5D setX(double x) {
         this.x = x;
         return this;
     }
@@ -152,7 +194,7 @@ public class Vector3D implements Vector {
      * @param y Значение по оси ординат (y)
      * @return Этот же вектор.
      */
-    public Vector3D setY(double y) {
+    public Vector5D setY(double y) {
         this.y = y;
         return this;
     }
@@ -163,17 +205,41 @@ public class Vector3D implements Vector {
      * @param z Значение по оси аппликат (z)
      * @return Этот же вектор.
      */
-    public Vector3D setZ(double z) {
+    public Vector5D setZ(double z) {
         this.z = z;
         return this;
     }
 
+    /**
+     * Установка значения по оси w.
+     *
+     * @param w Значение по оси w
+     * @return Этот же вектор.
+     */
+    public Vector5D setW(double w) {
+        this.w = w;
+        return this;
+    }
+
+    /**
+     * Установка значения по оси v.
+     *
+     * @param v Значение по оси v
+     * @return Этот же вектор.
+     */
+    public Vector5D setV(double v) {
+        this.v = v;
+        return this;
+    }
+
     @Override
-    public Vector3D setIndex(int index, double value) {
+    public Vector5D setIndex(int index, double value) {
         switch (index) {
             case Axis.X_INDEX -> x = value;
             case Axis.Y_INDEX -> y = value;
             case Axis.Z_INDEX -> z = value;
+            case Axis.W_INDEX -> w = value;
+            case Axis.V_INDEX -> v = value;
             default -> throw new VectorIndexError(index);
         }
         return this;
@@ -185,7 +251,7 @@ public class Vector3D implements Vector {
      * @param summand Слагаемое
      * @return Этот же вектор.
      */
-    public Vector3D addX(double summand) {
+    public Vector5D addX(double summand) {
         x += summand;
         return this;
     }
@@ -196,7 +262,7 @@ public class Vector3D implements Vector {
      * @param summand Слагаемое
      * @return Этот же вектор.
      */
-    public Vector3D addY(double summand) {
+    public Vector5D addY(double summand) {
         y += summand;
         return this;
     }
@@ -207,17 +273,41 @@ public class Vector3D implements Vector {
      * @param summand Слагаемое
      * @return Этот же вектор.
      */
-    public Vector3D addZ(double summand) {
+    public Vector5D addZ(double summand) {
         z += summand;
         return this;
     }
 
+    /**
+     * Прибавление к значению по оси w.
+     *
+     * @param summand Слагаемое
+     * @return Этот же вектор.
+     */
+    public Vector5D addW(double summand) {
+        w += summand;
+        return this;
+    }
+
+    /**
+     * Прибавление к значению по оси v.
+     *
+     * @param summand Слагаемое
+     * @return Этот же вектор.
+     */
+    public Vector5D addV(double summand) {
+        v += summand;
+        return this;
+    }
+
     @Override
-    public Vector3D addIndex(int index, double summand) {
+    public Vector5D addIndex(int index, double summand) {
         switch (index) {
             case Axis.X_INDEX -> x += summand;
             case Axis.Y_INDEX -> y += summand;
             case Axis.Z_INDEX -> z += summand;
+            case Axis.W_INDEX -> w += summand;
+            case Axis.V_INDEX -> v += summand;
             default -> throw new VectorIndexError(index);
         }
         return this;
@@ -229,7 +319,7 @@ public class Vector3D implements Vector {
      * @param subtrahend Вычитаемое
      * @return Этот же вектор.
      */
-    public Vector3D subtractX(double subtrahend) {
+    public Vector5D subtractX(double subtrahend) {
         x -= subtrahend;
         return this;
     }
@@ -240,7 +330,7 @@ public class Vector3D implements Vector {
      * @param subtrahend Вычитаемое
      * @return Этот же вектор.
      */
-    public Vector3D subtractY(double subtrahend) {
+    public Vector5D subtractY(double subtrahend) {
         y -= subtrahend;
         return this;
     }
@@ -251,17 +341,41 @@ public class Vector3D implements Vector {
      * @param subtrahend Вычитаемое
      * @return Этот же вектор.
      */
-    public Vector3D subtractZ(double subtrahend) {
+    public Vector5D subtractZ(double subtrahend) {
         z -= subtrahend;
         return this;
     }
 
+    /**
+     * Вычитание из значения по оси w.
+     *
+     * @param subtrahend Вычитаемое
+     * @return Этот же вектор.
+     */
+    public Vector5D subtractW(double subtrahend) {
+        w -= subtrahend;
+        return this;
+    }
+
+    /**
+     * Вычитание из значения по оси v.
+     *
+     * @param subtrahend Вычитаемое
+     * @return Этот же вектор.
+     */
+    public Vector5D subtractV(double subtrahend) {
+        v -= subtrahend;
+        return this;
+    }
+
     @Override
-    public Vector3D subtractIndex(int index, double subtrahend) {
+    public Vector5D subtractIndex(int index, double subtrahend) {
         switch (index) {
             case Axis.X_INDEX -> x -= subtrahend;
             case Axis.Y_INDEX -> y -= subtrahend;
             case Axis.Z_INDEX -> z -= subtrahend;
+            case Axis.W_INDEX -> w -= subtrahend;
+            case Axis.V_INDEX -> v -= subtrahend;
             default -> throw new VectorIndexError(index);
         }
         return this;
@@ -273,7 +387,7 @@ public class Vector3D implements Vector {
      * @param multiplier Множитель
      * @return Этот же вектор.
      */
-    public Vector3D multipleX(double multiplier) {
+    public Vector5D multipleX(double multiplier) {
         x *= multiplier;
         return this;
     }
@@ -284,7 +398,7 @@ public class Vector3D implements Vector {
      * @param multiplier Множитель
      * @return Этот же вектор.
      */
-    public Vector3D multipleY(double multiplier) {
+    public Vector5D multipleY(double multiplier) {
         y *= multiplier;
         return this;
     }
@@ -295,17 +409,41 @@ public class Vector3D implements Vector {
      * @param multiplier Множитель
      * @return Этот же вектор.
      */
-    public Vector3D multipleZ(double multiplier) {
+    public Vector5D multipleZ(double multiplier) {
         z *= multiplier;
         return this;
     }
 
+    /**
+     * Умножение значения по оси w.
+     *
+     * @param multiplier Множитель
+     * @return Этот же вектор.
+     */
+    public Vector5D multipleW(double multiplier) {
+        w *= multiplier;
+        return this;
+    }
+
+    /**
+     * Умножение значения по оси v.
+     *
+     * @param multiplier Множитель
+     * @return Этот же вектор.
+     */
+    public Vector5D multipleV(double multiplier) {
+        v *= multiplier;
+        return this;
+    }
+
     @Override
-    public Vector3D multipleIndex(int index, double multiplier) {
+    public Vector5D multipleIndex(int index, double multiplier) {
         switch (index) {
             case Axis.X_INDEX -> x *= multiplier;
             case Axis.Y_INDEX -> y *= multiplier;
             case Axis.Z_INDEX -> z *= multiplier;
+            case Axis.W_INDEX -> w *= multiplier;
+            case Axis.V_INDEX -> v *= multiplier;
             default -> throw new VectorIndexError(index);
         }
         return this;
@@ -317,7 +455,7 @@ public class Vector3D implements Vector {
      * @param divisor Делитель
      * @return Этот же вектор.
      */
-    public Vector3D divideX(double divisor) {
+    public Vector5D divideX(double divisor) {
         x /= divisor;
         return this;
     }
@@ -328,7 +466,7 @@ public class Vector3D implements Vector {
      * @param divisor Делитель
      * @return Этот же вектор.
      */
-    public Vector3D divideY(double divisor) {
+    public Vector5D divideY(double divisor) {
         y /= divisor;
         return this;
     }
@@ -339,17 +477,41 @@ public class Vector3D implements Vector {
      * @param divisor Делитель
      * @return Этот же вектор.
      */
-    public Vector3D divideZ(double divisor) {
+    public Vector5D divideZ(double divisor) {
         z /= divisor;
         return this;
     }
 
+    /**
+     * Деление значения по оси w.
+     *
+     * @param divisor Делитель
+     * @return Этот же вектор.
+     */
+    public Vector5D divideW(double divisor) {
+        w /= divisor;
+        return this;
+    }
+
+    /**
+     * Деление значения по оси v.
+     *
+     * @param divisor Делитель
+     * @return Этот же вектор.
+     */
+    public Vector5D divideV(double divisor) {
+        v /= divisor;
+        return this;
+    }
+
     @Override
-    public Vector3D divideIndex(int index, double divisor) {
+    public Vector5D divideIndex(int index, double divisor) {
         switch (index) {
             case Axis.X_INDEX -> x /= divisor;
             case Axis.Y_INDEX -> y /= divisor;
             case Axis.Z_INDEX -> z /= divisor;
+            case Axis.W_INDEX -> w /= divisor;
+            case Axis.V_INDEX -> v /= divisor;
             default -> throw new VectorIndexError(index);
         }
         return this;
@@ -361,26 +523,34 @@ public class Vector3D implements Vector {
      * @param x Значение по оси абсцисс (x)
      * @param y Значение по оси ординат (y)
      * @param z Значение по оси аппликат (z)
+     * @param w Значение по оси w
+     * @param v Значение по оси v
      * @return Этот же вектор.
      */
-    public Vector3D set(double x, double y, double z) {
+    public Vector5D set(double x, double y, double z, double w, double v) {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.w = w;
+        this.v = v;
         return this;
     }
 
     @Override
-    public Vector3D set(Vector vector) {
-        if (vector instanceof Vector3D vector3D) {
-            x = vector3D.x;
-            y = vector3D.y;
-            z = vector3D.z;
+    public Vector5D set(Vector vector) {
+        if (vector instanceof Vector5D vector5D) {
+            x = vector5D.x;
+            y = vector5D.y;
+            z = vector5D.z;
+            w = vector5D.w;
+            v = vector5D.v;
             return this;
         }
         if (vector.containsIndex(Axis.X_INDEX)) x = vector.getIndex(Axis.X_INDEX);
         if (vector.containsIndex(Axis.Y_INDEX)) y = vector.getIndex(Axis.Y_INDEX);
         if (vector.containsIndex(Axis.Z_INDEX)) z = vector.getIndex(Axis.Z_INDEX);
+        if (vector.containsIndex(Axis.W_INDEX)) w = vector.getIndex(Axis.W_INDEX);
+        if (vector.containsIndex(Axis.V_INDEX)) v = vector.getIndex(Axis.V_INDEX);
         return this;
     }
 
@@ -390,26 +560,34 @@ public class Vector3D implements Vector {
      * @param summandX Слагаемое по оси абсцисс (x)
      * @param summandY Слагаемое по оси ординат (y)
      * @param summandZ Слагаемое по оси аппликат (z)
+     * @param summandW Слагаемое по оси w
+     * @param summandV Слагаемое по оси v
      * @return Этот же вектор.
      */
-    public Vector3D add(double summandX, double summandY, double summandZ) {
+    public Vector5D add(double summandX, double summandY, double summandZ, double summandW, double summandV) {
         x += summandX;
         y += summandY;
         z += summandZ;
+        w += summandW;
+        v += summandV;
         return this;
     }
 
     @Override
-    public Vector3D add(Vector summand) {
-        if (summand instanceof Vector3D summand3D) {
-            x += summand3D.x;
-            y += summand3D.y;
-            z += summand3D.z;
+    public Vector5D add(Vector summand) {
+        if (summand instanceof Vector5D summand5D) {
+            x += summand5D.x;
+            y += summand5D.y;
+            z += summand5D.z;
+            w += summand5D.w;
+            v += summand5D.v;
             return this;
         }
         x += summand.getIndexOrZero(Axis.X_INDEX);
         y += summand.getIndexOrZero(Axis.Y_INDEX);
         z += summand.getIndexOrZero(Axis.Z_INDEX);
+        w += summand.getIndexOrZero(Axis.W_INDEX);
+        v += summand.getIndexOrZero(Axis.V_INDEX);
         return this;
     }
 
@@ -419,103 +597,117 @@ public class Vector3D implements Vector {
      * @param subtrahendX Вычитаемое по оси абсцисс (x)
      * @param subtrahendY Вычитаемое по оси ординат (y)
      * @param subtrahendZ Вычитаемое по оси аппликат (z)
+     * @param subtrahendW Вычитаемое по оси w
+     * @param subtrahendV Вычитаемое по оси v
      * @return Этот же вектор.
      */
-    public Vector3D subtract(double subtrahendX, double subtrahendY, double subtrahendZ) {
+    public Vector5D subtract(double subtrahendX, double subtrahendY, double subtrahendZ, double subtrahendW, double subtrahendV) {
         x -= subtrahendX;
         y -= subtrahendY;
         z -= subtrahendZ;
+        w -= subtrahendW;
+        v -= subtrahendV;
         return this;
     }
 
     @Override
-    public Vector3D subtract(Vector subtrahend) {
-        if (subtrahend instanceof Vector3D subtrahend3D) {
-            x -= subtrahend3D.x;
-            y -= subtrahend3D.y;
-            z -= subtrahend3D.z;
+    public Vector5D subtract(Vector subtrahend) {
+        if (subtrahend instanceof Vector5D subtrahend5D) {
+            x -= subtrahend5D.x;
+            y -= subtrahend5D.y;
+            z -= subtrahend5D.z;
+            w -= subtrahend5D.w;
+            v -= subtrahend5D.v;
             return this;
         }
         x -= subtrahend.getIndexOrZero(Axis.X_INDEX);
         y -= subtrahend.getIndexOrZero(Axis.Y_INDEX);
         z -= subtrahend.getIndexOrZero(Axis.Z_INDEX);
+        w -= subtrahend.getIndexOrZero(Axis.W_INDEX);
+        v -= subtrahend.getIndexOrZero(Axis.V_INDEX);
         return this;
     }
 
     @Override
-    public Vector3D multiple(double multiplier) {
+    public Vector5D multiple(double multiplier) {
         x *= multiplier;
         y *= multiplier;
         z *= multiplier;
+        w *= multiplier;
+        v *= multiplier;
         return this;
     }
 
     @Override
-    public Vector3D divide(double divisor) {
+    public Vector5D divide(double divisor) {
         x /= divisor;
         y /= divisor;
         z /= divisor;
+        w /= divisor;
+        v /= divisor;
         return this;
     }
 
     @Override
     public double length() {
-        return Math.sqrt(x * x + y * y + z * z);
+        return Math.sqrt(x * x + y * y + z * z + w * w + v * v);
     }
 
     @Override
     public double distance(Vector vector) {
-        if (vector instanceof Vector3D vector3D) {
-            return Math.sqrt((x - vector3D.x) * (x - vector3D.x) + (y - vector3D.y) * (y - vector3D.y) + (z - vector3D.z) * (z - vector3D.z));
+        if (vector instanceof Vector5D vector5D) {
+            return Math.sqrt((x - vector5D.x) * (x - vector5D.x) + (y - vector5D.y) * (y - vector5D.y) + (z - vector5D.z) * (z - vector5D.z) + (w - vector5D.w) * (w - vector5D.w) + (v - vector5D.v) * (v - vector5D.v));
         }
-        return Math.sqrt((x - vector.getIndexOrZero(Axis.X_INDEX)) * (x - vector.getIndexOrZero(Axis.X_INDEX)) + (y - vector.getIndexOrZero(Axis.Y_INDEX)) * (y - vector.getIndexOrZero(Axis.Y_INDEX)) + (z - vector.getIndexOrZero(Axis.Z_INDEX)) * (z - vector.getIndexOrZero(Axis.Z_INDEX)));
+        return Math.sqrt((x - vector.getIndexOrZero(Axis.X_INDEX)) * (x - vector.getIndexOrZero(Axis.X_INDEX)) + (y - vector.getIndexOrZero(Axis.Y_INDEX)) * (y - vector.getIndexOrZero(Axis.Y_INDEX)) + (z - vector.getIndexOrZero(Axis.Z_INDEX)) * (z - vector.getIndexOrZero(Axis.Z_INDEX)) + (w - vector.getIndexOrZero(Axis.W_INDEX)) * (w - vector.getIndexOrZero(Axis.W_INDEX)) + (v - vector.getIndexOrZero(Axis.V_INDEX)) * (v - vector.getIndexOrZero(Axis.V_INDEX)));
     }
 
     @Override
-    public Vector3D normalize() {
+    public Vector5D normalize() {
         double length = length();
         x /= length;
         y /= length;
         z /= length;
+        w /= length;
+        v /= length;
         return this;
     }
 
     @Override
-    public Vector3D toNormalized() {
+    public Vector5D toNormalized() {
         double length = length();
-        return new Vector3D(x / length, y / length, z / length);
+        return new Vector5D(x / length, y / length, z / length, w / length, v / length);
     }
 
     @Override
-    public Vector3D vectorTo(Vector vector) {
-        if (vector instanceof Vector3D vector3D) {
-            return new Vector3D(vector3D.x - x, vector3D.y - y, vector3D.z - z);
+    public Vector5D vectorTo(Vector vector) {
+        if (vector instanceof Vector5D vector5D) {
+            return new Vector5D(vector5D.x - x, vector5D.y - y, vector5D.z - z, vector5D.w - w, vector5D.v - v);
         }
-        return new Vector3D(vector.getIndexOrZero(Axis.X_INDEX) - x, vector.getIndexOrZero(Axis.Y_INDEX) - y, vector.getIndexOrZero(Axis.Z_INDEX) - z);
+        return new Vector5D(vector.getIndexOrZero(Axis.X_INDEX) - x, vector.getIndexOrZero(Axis.Y_INDEX) - y, vector.getIndexOrZero(Axis.Z_INDEX) - z, vector.getIndexOrZero(Axis.W_INDEX) - w, vector.getIndexOrZero(Axis.V_INDEX) - v);
     }
 
     @Override
-    public Vector3D directionTo(Vector vector) {
-        if (vector instanceof Vector3D vector3D) {
-            return new Vector3D(vector3D.x - x, vector3D.y - y, vector3D.z - z).normalize();
+    public Vector5D directionTo(Vector vector) {
+        if (vector instanceof Vector5D vector5D) {
+            return new Vector5D(vector5D.x - x, vector5D.y - y, vector5D.z - z, vector5D.w - w, vector5D.v - v).normalize();
         }
-        return new Vector3D(vector.getIndexOrZero(Axis.X_INDEX) - x, vector.getIndexOrZero(Axis.Y_INDEX) - y, vector.getIndexOrZero(Axis.Z_INDEX) - z).normalize();
+        return new Vector5D(vector.getIndexOrZero(Axis.X_INDEX) - x, vector.getIndexOrZero(Axis.Y_INDEX) - y, vector.getIndexOrZero(Axis.Z_INDEX) - z, vector.getIndexOrZero(Axis.W_INDEX) - w, vector.getIndexOrZero(Axis.V_INDEX) - v).normalize();
     }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Vector vector)) return false;
-        if (vector instanceof Vector3D vector3D) {
-            return x == vector3D.x && y == vector3D.y && z == vector3D.z;
+        if (vector instanceof Vector5D vector5D) {
+            return x == vector5D.x && y == vector5D.y && z == vector5D.z && w == vector5D.w && v == vector5D.v;
         }
-        if (vector.containsIndex(Axis.X_INDEX) && vector.containsIndex(Axis.Y_INDEX) && vector.containsIndex(Axis.Z_INDEX)) {
-            return x == vector.getIndex(Axis.X_INDEX) && y == vector.getIndex(Axis.Y_INDEX) && z == vector.getIndex(Axis.Z_INDEX);
+        if (vector.containsIndex(Axis.X_INDEX) && vector.containsIndex(Axis.Y_INDEX) && vector.containsIndex(Axis.Z_INDEX) && vector.containsIndex(Axis.W_INDEX) && vector.containsIndex(Axis.V_INDEX)) {
+            return x == vector.getIndex(Axis.X_INDEX) && y == vector.getIndex(Axis.Y_INDEX) && z == vector.getIndex(Axis.Z_INDEX) && w == vector.getIndex(Axis.W_INDEX) && v == vector.getIndex(Axis.V_INDEX);
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, z);
+        return Objects.hash(x, y, z, w, v);
     }
 }

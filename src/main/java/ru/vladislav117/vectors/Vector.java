@@ -2,7 +2,7 @@ package ru.vladislav117.vectors;
 
 /**
  * Абстрактный вектор.
- * Экземпляры реализаций этого интерфейса должны иметь конкретную длину и значения осей.
+ * Экземпляры реализаций этого интерфейса должны иметь конкретную длину и значения по осям.
  */
 public interface Vector extends Cloneable {
     /**
@@ -20,172 +20,104 @@ public interface Vector extends Cloneable {
     int getSize();
 
     /**
-     * Получение значения оси вектора.
+     * Проверка, существует ли значение по индексу.
      *
-     * @param axis Индекс оси вектора
-     * @return Значение оси вектора.
-     * @see Vector#getAxis(Axis)
+     * @param index Индекс значения вектора
+     * @return Существует ли значение по индексу.
      */
-    double getAxis(int axis);
+    boolean containsIndex(int index);
 
     /**
-     * Получение значения оси вектора.
+     * Получение значения вектора по индексу.
      *
-     * @param axis Ось вектора
-     * @return Значение оси вектора.
-     * @see Vector#getAxis(int)
+     * @param index Индекс значения вектора
+     * @return Значение вектора.
      */
-    double getAxis(Axis axis);
+    double getIndex(int index);
 
     /**
-     * Получение значения оси вектора.
-     * Если у вектора нет оси с указанным индексом, будет возвращён 0.
+     * Получение значения вектора по индексу.
+     * Если у вектора нет значения по указанному индексу, будет возвращён 0.
      *
-     * @param axis Индекс оси вектора
-     * @return Значение оси вектора.
-     * @see Vector#getAxisOrZero(Axis)
+     * @param index Индекс значения вектора
+     * @return Значение вектора.
      */
-    double getAxisOrZero(int axis);
+    double getIndexOrZero(int index);
 
     /**
-     * Получение значения оси вектора.
-     * Если у вектора нет указанной оси, будет возвращён 0.
+     * Установка значения вектора по индексу.
      *
-     * @param axis Ось вектора
-     * @return Значение оси вектора.
-     * @see Vector#getAxisOrZero(int)
-     */
-    double getAxisOrZero(Axis axis);
-
-    /**
-     * Установка значения оси вектора.
-     *
-     * @param axis  Индекс оси вектора
-     * @param value Значение оси вектора
+     * @param index Индекс значения вектора
+     * @param value Значение
      * @return Этот же вектор.
-     * @see Vector#setAxis(Axis, double)
      */
-    Vector setAxis(int axis, double value);
+    Vector setIndex(int index, double value);
 
     /**
-     * Установка значения оси вектора.
+     * Прибавление к значению вектора по индексу.
      *
-     * @param axis  Ось вектора
-     * @param value Значение оси вектора
-     * @return Этот же вектор.
-     * @see Vector#setAxis(int, double)
-     */
-    Vector setAxis(Axis axis, double value);
-
-    /**
-     * Прибавление к значению оси вектора.
-     *
-     * @param axis    Индекс оси вектора
+     * @param index   Индекс значения вектора
      * @param summand Слагаемое
      * @return Этот же вектор.
-     * @see Vector#addAxis(Axis, double)
      */
-    Vector addAxis(int axis, double summand);
+    Vector addIndex(int index, double summand);
 
     /**
-     * Прибавление к значению оси вектора.
+     * Вычитание из значения вектора по индексу.
      *
-     * @param axis    Ось вектора
-     * @param summand Слагаемое
-     * @return Этот же вектор.
-     * @see Vector#addAxis(int, double)
-     */
-    Vector addAxis(Axis axis, double summand);
-
-    /**
-     * Вычитание из значения оси вектора.
-     *
-     * @param axis       Индекс оси вектора
+     * @param index      Индекс значения вектора
      * @param subtrahend Вычитаемое
      * @return Этот же вектор.
-     * @see Vector#subtractAxis(Axis, double)
      */
-    Vector subtractAxis(int axis, double subtrahend);
+    Vector subtractIndex(int index, double subtrahend);
 
     /**
-     * Вычитание из значения оси вектора.
+     * Умножение значения вектора по индексу.
      *
-     * @param axis       Ось вектора
-     * @param subtrahend Вычитаемое
-     * @return Этот же вектор.
-     * @see Vector#subtractAxis(int, double)
-     */
-    Vector subtractAxis(Axis axis, double subtrahend);
-
-    /**
-     * Умножение значения оси вектора.
-     *
-     * @param axis       Индекс оси вектора
+     * @param index      Индекс значения вектора
      * @param multiplier Множитель
      * @return Этот же вектор.
-     * @see Vector#multipleAxis(Axis, double)
      */
-    Vector multipleAxis(int axis, double multiplier);
+    Vector multipleIndex(int index, double multiplier);
 
     /**
-     * Умножение значения оси вектора.
+     * Деление значения вектора по индексу.
      *
-     * @param axis       Ось вектора
-     * @param multiplier Множитель
-     * @return Этот же вектор.
-     * @see Vector#multipleAxis(int, double)
-     */
-    Vector multipleAxis(Axis axis, double multiplier);
-
-    /**
-     * Деление значения оси вектора.
-     *
-     * @param axis    Индекс оси вектора
+     * @param index   Индекс значения вектора
      * @param divisor Делитель
      * @return Этот же вектор.
-     * @see Vector#divideAxis(Axis, double)
      */
-    Vector divideAxis(int axis, double divisor);
+    Vector divideIndex(int index, double divisor);
 
     /**
-     * Деление значения оси вектора.
+     * Установка значений вектора в значения другого вектора.
+     * Если у векторов совпадают не все индексы значений, то такие индексы будут проигнорированы.
      *
-     * @param axis    Ось вектора
-     * @param divisor Делитель
-     * @return Этот же вектор.
-     * @see Vector#divideAxis(int, double)
-     */
-    Vector divideAxis(Axis axis, double divisor);
-
-    /**
-     * Установка значений осей вектора соответственно другому вектору.
-     * Если вектора разной длины, значения осей будут взяты по возможности.
-     *
-     * @param vector Вектор, значения осей которого будут взяты
+     * @param vector Вектор, значения которого будут присвоены
      * @return Этот же вектор.
      */
     Vector set(Vector vector);
 
     /**
-     * Прибавление значений осей вектора соответственно другому вектору.
-     * Если вектора разной длины, значения осей будут взяты по возможности.
+     * Прибавление к значениям вектора значений другого вектора.
+     * Если у векторов совпадают не все индексы значений, то такие индексы будут проигнорированы.
      *
-     * @param summand Вектор, значения осей которого будут взяты как слагаемые
+     * @param summand Вектор, значения которого будут взяты как слагаемые
      * @return Этот же вектор.
      */
     Vector add(Vector summand);
 
     /**
-     * Вычитание значений осей вектора соответственно другому вектору.
-     * Если вектора разной длины, значения осей будут взяты по возможности.
+     * Вычитание из значений вектора значений другого вектора.
+     * Если у векторов совпадают не все индексы значений, то такие индексы будут проигнорированы.
      *
-     * @param subtrahend Вектор, значения осей которого будут взяты как вычитаемые
+     * @param subtrahend Вектор, значения которого будут взяты как вычитаемые
      * @return Этот же вектор.
      */
     Vector subtract(Vector subtrahend);
 
     /**
-     * Умножение значений всех осей вектора.
+     * Умножение всех значений вектора.
      *
      * @param multiplier Множитель
      * @return Этот же вектор.
@@ -193,28 +125,12 @@ public interface Vector extends Cloneable {
     Vector multiple(double multiplier);
 
     /**
-     * Деление значений всех осей вектора.
+     * Деление всех значений вектора.
      *
      * @param divisor Делитель
      * @return Этот же вектор.
      */
     Vector divide(double divisor);
-
-    /**
-     * Приведение вектора к нормальной форме. Изменяется этот же вектор.
-     *
-     * @return Этот же вектор.
-     * @see Vector#toNormalized()
-     */
-    Vector normalize();
-
-    /**
-     * Приведение копии вектора к нормальной форме. Этот вектор не изменяется.
-     *
-     * @return Копия этого вектора в нормальной форме.
-     * @see Vector#normalize()
-     */
-    Vector toNormalized();
 
     /**
      * Вычисление длины вектора.
@@ -225,10 +141,44 @@ public interface Vector extends Cloneable {
 
     /**
      * Вычисление расстояния до другого вектора.
-     * Если вектора разной длины, произойдет ошибка.
+     * Если у векторов совпадают не все индексы значений, то значения по таким индексам будут взяты за 0.
      *
      * @param vector Вектор, расстояние до которого будет вычислено
      * @return Расстояние до вектора.
      */
     double distance(Vector vector);
+
+    /**
+     * Приведение вектора к нормальной форме. Изменяется этот же вектор.
+     *
+     * @return Этот же вектор.
+     */
+    Vector normalize();
+
+    /**
+     * Приведение копии вектора к нормальной форме. Этот вектор не изменяется.
+     *
+     * @return Копия этого вектора в нормальной форме.
+     */
+    Vector toNormalized();
+
+    /**
+     * Вычисление вектора до целевого вектора.
+     * Представляет собой следующий алгоритм: из целевого вектора вычитается текущий.
+     * Если у векторов совпадают не все индексы значений, то значения по таким индексам будут взяты за 0.
+     *
+     * @param vector Целевой вектор
+     * @return Вектор до целевого вектора.
+     */
+    Vector vectorTo(Vector vector);
+
+    /**
+     * Вычисление направления до вектора.
+     * Представляет собой следующий алгоритм: из целевого вектора вычитается текущий, затем результат нормализуется.
+     * Если у векторов совпадают не все индексы значений, то значения по таким индексам будут взяты за 0.
+     *
+     * @param vector Целевой вектор
+     * @return Направление до целевого вектора.
+     */
+    Vector directionTo(Vector vector);
 }

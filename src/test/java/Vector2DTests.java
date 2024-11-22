@@ -1,6 +1,8 @@
+import org.junit.jupiter.api.AssertionFailureBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.vladislav117.vectors.Axis;
+import ru.vladislav117.vectors.Vector1D;
 import ru.vladislav117.vectors.Vector2D;
 
 public class Vector2DTests {
@@ -8,18 +10,25 @@ public class Vector2DTests {
     public static final double accuracy = Math.pow(10, 9);
 
     protected double round(double number) {
-        return ((int) number * accuracy) / accuracy;
+        return ((int) (number * accuracy)) / accuracy;
     }
 
     protected void assertVector(Vector2D vector, double x, double y) {
-        if (0 < vector.getX() && vector.getX() < zeroApprox) vector.setX(0);
-        if (0 < vector.getY() && vector.getY() < zeroApprox) vector.setY(0);
-        vector.setX(round(vector.getX()));
-        vector.setY(round(vector.getY()));
+        double vectorX = vector.getX();
+        double vectorY = vector.getY();
+        if (0 < Math.abs(vectorX) && Math.abs(vectorX) < zeroApprox) vectorX = 0;
+        if (0 < Math.abs(vectorY) && Math.abs(vectorY) < zeroApprox) vectorY = 0;
+        vectorX = round(vectorX);
+        vectorY = round(vectorY);
         x = round(x);
         y = round(y);
-        Assertions.assertEquals(vector.getX(), x);
-        Assertions.assertEquals(vector.getY(), y);
+        if (vectorX != x || vectorY != y) {
+            AssertionFailureBuilder.assertionFailure()
+                    .message("Values of the vectors do not match")
+                    .expected("(" + x + ", " + y + ")")
+                    .actual("(" + vectorX + ", " + vectorY + ")")
+                    .buildAndThrow();
+        }
     }
 
     @Test
@@ -37,40 +46,27 @@ public class Vector2DTests {
 
         vector = new Vector2D();
         assertVector(vector, 0, 0);
-
-        vector = Vector2D.fromAngle(Math.PI / 2, 2);
-        assertVector(vector, 0, 2);
-
-        vector = Vector2D.fromAngle(Math.PI);
-        assertVector(vector, -1, 0);
-
-        vector = Vector2D.fromAngleDegrees(45, 2);
-        assertVector(vector, Math.sqrt(2), Math.sqrt(2));
-
-        vector = Vector2D.fromAngleDegrees(-90);
-        assertVector(vector, 0, -1);
     }
 
     @Test
     public void testGetters() {
         Vector2D vector;
 
-        vector = new Vector2D(1, 2);
-        Assertions.assertEquals(vector.getSize(), 2);
+        vector = new Vector2D();
+        Assertions.assertEquals(2, vector.getSize());
 
         vector = new Vector2D(1, 2);
-        Assertions.assertEquals(vector.getX(), 1);
-        Assertions.assertEquals(vector.getY(), 2);
+        Assertions.assertEquals(1, vector.getX());
+        Assertions.assertEquals(2, vector.getY());
 
         vector = new Vector2D(1, 2);
-        Assertions.assertEquals(vector.getAxis(Axis.X_INDEX), 1);
-        Assertions.assertEquals(vector.getAxis(Axis.Y), 2);
+        Assertions.assertEquals(1, vector.getIndex(Axis.X_INDEX));
+        Assertions.assertEquals(2, vector.getIndex(Axis.Y_INDEX));
 
         vector = new Vector2D(1, 2);
-        Assertions.assertEquals(vector.getAxisOrZero(Axis.X_INDEX), 1);
-        Assertions.assertEquals(vector.getAxisOrZero(Axis.Y), 2);
-        Assertions.assertEquals(vector.getAxisOrZero(-1), 0);
-        Assertions.assertEquals(vector.getAxisOrZero(new Axis(-1)), 0);
+        Assertions.assertEquals(1, vector.getIndexOrZero(Axis.X_INDEX));
+        Assertions.assertEquals(2, vector.getIndexOrZero(Axis.Y_INDEX));
+        Assertions.assertEquals(0, vector.getIndexOrZero(-1));
     }
 
     @Test
@@ -78,22 +74,22 @@ public class Vector2DTests {
         Vector2D vector;
 
         vector = new Vector2D(1, 2);
-        vector.setX(2);
-        vector.setY(3);
-        assertVector(vector, 2, 3);
+        vector.setX(3);
+        vector.setY(4);
+        assertVector(vector, 3, 4);
 
         vector = new Vector2D(1, 2);
-        vector.setAxis(Axis.X_INDEX, 2);
-        vector.setAxis(Axis.Y, 3);
-        assertVector(vector, 2, 3);
+        vector.setIndex(Axis.X_INDEX, 3);
+        vector.setIndex(Axis.Y_INDEX, 4);
+        assertVector(vector, 3, 4);
 
         vector = new Vector2D(1, 2);
-        vector.set(2, 3);
-        assertVector(vector, 2, 3);
+        vector.set(3, 4);
+        assertVector(vector, 3, 4);
 
         vector = new Vector2D(1, 2);
-        vector.set(new Vector2D(2, 3));
-        assertVector(vector, 2, 3);
+        vector.set(new Vector2D(3, 4));
+        assertVector(vector, 3, 4);
     }
 
     @Test
@@ -102,39 +98,39 @@ public class Vector2DTests {
 
         vector = new Vector2D(1, 2);
         vector.addX(1);
-        vector.addY(1);
-        assertVector(vector, 2, 3);
+        vector.addY(2);
+        assertVector(vector, 2, 4);
 
         vector = new Vector2D(1, 2);
-        vector.addAxis(Axis.X_INDEX, 1);
-        vector.addAxis(Axis.Y, 1);
-        assertVector(vector, 2, 3);
+        vector.addIndex(Axis.X_INDEX, 1);
+        vector.addIndex(Axis.Y_INDEX, 2);
+        assertVector(vector, 2, 4);
 
         vector = new Vector2D(1, 2);
-        vector.add(1, 1);
-        assertVector(vector, 2, 3);
+        vector.add(1, 2);
+        assertVector(vector, 2, 4);
 
         vector = new Vector2D(1, 2);
-        vector.add(new Vector2D(1, 1));
-        assertVector(vector, 2, 3);
+        vector.add(new Vector2D(1, 2));
+        assertVector(vector, 2, 4);
 
         vector = new Vector2D(1, 2);
         vector.subtractX(1);
-        vector.subtractY(1);
-        assertVector(vector, 0, 1);
+        vector.subtractY(2);
+        assertVector(vector, 0, 0);
 
         vector = new Vector2D(1, 2);
-        vector.subtractAxis(Axis.X_INDEX, 1);
-        vector.subtractAxis(Axis.Y, 1);
-        assertVector(vector, 0, 1);
+        vector.subtractIndex(Axis.X_INDEX, 1);
+        vector.subtractIndex(Axis.Y_INDEX, 2);
+        assertVector(vector, 0, 0);
 
         vector = new Vector2D(1, 2);
-        vector.subtract(1, 1);
-        assertVector(vector, 0, 1);
+        vector.subtract(1, 2);
+        assertVector(vector, 0, 0);
 
         vector = new Vector2D(1, 2);
-        vector.subtract(new Vector2D(1, 1));
-        assertVector(vector, 0, 1);
+        vector.subtract(new Vector2D(1, 2));
+        assertVector(vector, 0, 0);
 
         vector = new Vector2D(1, 2);
         vector.multipleX(2);
@@ -142,8 +138,8 @@ public class Vector2DTests {
         assertVector(vector, 2, 4);
 
         vector = new Vector2D(1, 2);
-        vector.multipleAxis(Axis.X_INDEX, 2);
-        vector.multipleAxis(Axis.Y, 2);
+        vector.multipleIndex(Axis.X_INDEX, 2);
+        vector.multipleIndex(Axis.Y_INDEX, 2);
         assertVector(vector, 2, 4);
 
         vector = new Vector2D(1, 2);
@@ -156,13 +152,38 @@ public class Vector2DTests {
         assertVector(vector, 0.5, 1);
 
         vector = new Vector2D(1, 2);
-        vector.divideAxis(Axis.X_INDEX, 2);
-        vector.divideAxis(Axis.Y, 2);
+        vector.divideIndex(Axis.X_INDEX, 2);
+        vector.divideIndex(Axis.Y_INDEX, 2);
         assertVector(vector, 0.5, 1);
 
         vector = new Vector2D(1, 2);
         vector.divide(2);
         assertVector(vector, 0.5, 1);
+    }
+
+    @Test
+    public void testCalculations() {
+        Vector2D vector;
+
+        vector = new Vector2D(1, 2);
+        Assertions.assertEquals(Math.sqrt(5), vector.length());
+
+        vector = new Vector2D(1, 2);
+        Assertions.assertEquals(Math.sqrt(5), vector.distance(new Vector2D()));
+        Assertions.assertEquals(0, vector.distance(new Vector2D(1, 2)));
+        Assertions.assertEquals(Math.sqrt(8), vector.distance(new Vector2D(3, 4)));
+
+        Vector2D other;
+
+        vector = new Vector2D(1, 2);
+        other = new Vector2D(10, 10);
+        Vector2D vectorTo = vector.vectorTo(other);
+        assertVector(vectorTo, 9, 8);
+
+        vector = new Vector2D(1, 1);
+        other = new Vector2D(0, 0);
+        Vector2D directionTo = vector.directionTo(other);
+        assertVector(directionTo, -1 / Math.sqrt(2), -1 / Math.sqrt(2));
     }
 
     @Test
@@ -180,95 +201,17 @@ public class Vector2DTests {
     }
 
     @Test
-    public void testCalculations() {
-        Vector2D vector;
+    public void equalsTest() {
+        Vector2D vector, other1, other2;
+        Vector1D other1D;
 
         vector = new Vector2D(1, 2);
-        Assertions.assertEquals(vector.length(), Math.sqrt(5));
+        other1 = new Vector2D(1, 2);
+        other2 = new Vector2D(5, 4);
+        other1D = new Vector1D(1);
 
-        vector = new Vector2D(1, 2);
-        Assertions.assertEquals(vector.distance(new Vector2D()), Math.sqrt(5));
-        Assertions.assertEquals(vector.distance(new Vector2D(1, 2)), 0);
-        Assertions.assertEquals(vector.distance(new Vector2D(3, 4)), Math.sqrt(8));
-
-        vector = new Vector2D(1, 1);
-        Assertions.assertEquals(vector.angle(), Math.PI / 4);
-        Assertions.assertEquals(vector.angleDegrees(), 45);
-
-        vector = new Vector2D(-1, 1);
-        Assertions.assertEquals(vector.angle(), 3 * Math.PI / 4);
-        Assertions.assertEquals(vector.angleDegrees(), 135);
-
-        vector = new Vector2D(-1, -1);
-        Assertions.assertEquals(vector.angle(), 5 * Math.PI / 4);
-        Assertions.assertEquals(vector.angleDegrees(), 225);
-
-        vector = new Vector2D(1, -1);
-        Assertions.assertEquals(vector.angle(), 7 * Math.PI / 4);
-        Assertions.assertEquals(vector.angleDegrees(), 315);
-
-        vector = new Vector2D(0, 0);
-        Assertions.assertEquals(vector.angle(), 0);
-        Assertions.assertEquals(vector.angleDegrees(), 0);
-
-        vector = new Vector2D(0, 1);
-        Assertions.assertEquals(vector.angle(), Math.PI / 2);
-        Assertions.assertEquals(vector.angleDegrees(), 90);
-
-        vector = new Vector2D(0, -1);
-        Assertions.assertEquals(vector.angle(), 3 * Math.PI / 2);
-        Assertions.assertEquals(vector.angleDegrees(), 270);
-
-        Vector2D other;
-
-        vector = new Vector2D(1, 1);
-        other = new Vector2D(2, 2);
-        Assertions.assertEquals(vector.angleTo(other), Math.PI / 4);
-        Assertions.assertEquals(vector.angleDegreesTo(other), 45);
-
-        vector = new Vector2D(1, 1);
-        other = new Vector2D(-2, -2);
-        Assertions.assertEquals(vector.angleTo(other), 5 * Math.PI / 4);
-        Assertions.assertEquals(vector.angleDegreesTo(other), 225);
-
-        vector = new Vector2D(1, 1);
-        other = new Vector2D(1, 100);
-        Assertions.assertEquals(vector.angleTo(other), Math.PI / 2);
-        Assertions.assertEquals(vector.angleDegreesTo(other), 90);
-
-        vector = new Vector2D(1, 1);
-        other = new Vector2D(1, -100);
-        Assertions.assertEquals(vector.angleTo(other), 3 * Math.PI / 2);
-        Assertions.assertEquals(vector.angleDegreesTo(other), 270);
-
-        vector = new Vector2D(1, 1);
-        other = new Vector2D(1, 1);
-        Assertions.assertEquals(vector.angleTo(other), Math.PI);
-        Assertions.assertEquals(vector.angleDegreesTo(other), 180);
-
-        vector = new Vector2D(1, 1);
-        other = new Vector2D(-100, 1);
-        Assertions.assertEquals(vector.angleTo(other), Math.PI);
-        Assertions.assertEquals(vector.angleDegreesTo(other), 180);
-
-        vector = new Vector2D(1, 1);
-        other = new Vector2D(100, 1);
-        Assertions.assertEquals(vector.angleTo(other), Math.PI * 2);
-        Assertions.assertEquals(vector.angleDegreesTo(other), 360);
-
-        vector = new Vector2D(1, 1);
-        other = new Vector2D(2, 2);
-        Assertions.assertEquals(vector.directionTo(other).getX(), 1 / Math.sqrt(2));
-        Assertions.assertEquals(vector.directionTo(other).getY(), 1 / Math.sqrt(2));
-
-        vector = new Vector2D(1, 1);
-        other = new Vector2D(1, 2);
-        Assertions.assertEquals(vector.directionTo(other).getX(), 0);
-        Assertions.assertEquals(vector.directionTo(other).getY(), 1);
-
-        vector = new Vector2D(1, 1);
-        other = new Vector2D(3, 1);
-        Assertions.assertEquals(vector.vectorTo(other).getX(), 2);
-        Assertions.assertEquals(vector.vectorTo(other).getY(), 0);
+        Assertions.assertEquals(vector, other1);
+        Assertions.assertNotEquals(vector, other2);
+        Assertions.assertNotEquals(vector, other1D);
     }
 }

@@ -1,7 +1,8 @@
 package ru.vladislav117.vectors;
 
-import ru.vladislav117.vectors.error.VectorSizeIncompatibilityError;
-import ru.vladislav117.vectors.error.WrongAxisIndexError;
+import ru.vladislav117.vectors.error.VectorIndexError;
+
+import java.util.Objects;
 
 /**
  * Вектор в двумерном пространстве.
@@ -12,19 +13,19 @@ public class Vector2D implements Vector {
      */
     public static final int SIZE = 2;
     /**
-     * Значение оси абсцисс (X).
+     * Значение по оси абсцисс (x).
      */
     protected double x;
     /**
-     * Значение оси ординат (Y).
+     * Значение по оси ординат (y).
      */
     protected double y;
 
     /**
-     * Создание вектора.
+     * Создание двумерного вектора.
      *
-     * @param x Значение оси абсцисс (X)
-     * @param y Значение оси ординат (Y)
+     * @param x Значение по оси абсцисс (x)
+     * @param y Значение по оси ординат (y)
      */
     public Vector2D(double x, double y) {
         this.x = x;
@@ -32,10 +33,10 @@ public class Vector2D implements Vector {
     }
 
     /**
-     * Создание вектора на основе другого вектора.
-     * Значения осей будут взяты по возможности.
+     * Создание двумерного вектора на основе другого вектора.
+     * Если у векторов совпадают не все индексы значений, то значения по таким индексам будут взяты за 0.
      *
-     * @param vector Вектор, значения осей которого будут взяты
+     * @param vector Вектор, значения по осям которого будут взяты
      */
     public Vector2D(Vector vector) {
         if (vector instanceof Vector2D vector2D) {
@@ -43,12 +44,12 @@ public class Vector2D implements Vector {
             y = vector2D.y;
             return;
         }
-        x = vector.getAxisOrZero(Axis.X_INDEX);
-        y = vector.getAxisOrZero(Axis.Y_INDEX);
+        x = vector.getIndexOrZero(Axis.X_INDEX);
+        y = vector.getIndexOrZero(Axis.Y_INDEX);
     }
 
     /**
-     * Создание вектора с нулевыми значениями осей.
+     * Создание двумерного вектора с нулевыми значениями.
      */
     public Vector2D() {
         x = 0;
@@ -67,105 +68,56 @@ public class Vector2D implements Vector {
         }
     }
 
-    /**
-     * Создание вектора из угла и длины.
-     *
-     * @param angle  Угол в радианах
-     * @param length Длина
-     * @return Созданный вектор.
-     */
-    public static Vector2D fromAngle(double angle, double length) {
-        return new Vector2D(Math.cos(angle) * length, Math.sin(angle) * length);
-    }
-
-    /**
-     * Создание вектора из угла с единичной длиной.
-     *
-     * @param angle Угол в радианах
-     * @return Созданный вектор.
-     */
-    public static Vector2D fromAngle(double angle) {
-        return new Vector2D(Math.cos(angle), Math.sin(angle));
-    }
-
-    /**
-     * Создание вектора из угла и длины.
-     *
-     * @param angle  Угол в градусах
-     * @param length Длина
-     * @return Созданный вектор.
-     */
-    public static Vector2D fromAngleDegrees(double angle, double length) {
-        angle = Math.toRadians(angle);
-        return new Vector2D(Math.cos(angle) * length, Math.sin(angle) * length);
-    }
-
-    /**
-     * Создание вектора из угла с единичной длиной.
-     *
-     * @param angle Угол в градусах
-     * @return Созданный вектор.
-     */
-    public static Vector2D fromAngleDegrees(double angle) {
-        angle = Math.toRadians(angle);
-        return new Vector2D(Math.cos(angle), Math.sin(angle));
-    }
-
     @Override
     public int getSize() {
         return SIZE;
     }
 
+    @Override
+    public boolean containsIndex(int index) {
+        return index == Axis.X_INDEX || index == Axis.Y_INDEX;
+    }
+
     /**
-     * Получение значения оси абсцисс (X).
+     * Получение значения по оси абсцисс (x).
      *
-     * @return Значение оси абсцисс (X).
+     * @return Значение по оси абсцисс (x).
      */
     public double getX() {
         return x;
     }
 
     /**
-     * Получение значения оси ординат (Y).
+     * Получение значения по оси ординат (y).
      *
-     * @return Значение оси ординат (Y).
+     * @return Значение по оси ординат (y).
      */
     public double getY() {
         return y;
     }
 
     @Override
-    public double getAxis(int axis) {
-        return switch (axis) {
+    public double getIndex(int index) {
+        return switch (index) {
             case Axis.X_INDEX -> x;
             case Axis.Y_INDEX -> y;
-            default -> throw new WrongAxisIndexError(axis, this);
+            default -> throw new VectorIndexError(index);
         };
     }
 
     @Override
-    public double getAxis(Axis axis) {
-        return getAxis(axis.getIndex());
-    }
-
-    @Override
-    public double getAxisOrZero(int axis) {
-        return switch (axis) {
+    public double getIndexOrZero(int index) {
+        return switch (index) {
             case Axis.X_INDEX -> x;
             case Axis.Y_INDEX -> y;
             default -> 0;
         };
     }
 
-    @Override
-    public double getAxisOrZero(Axis axis) {
-        return getAxisOrZero(axis.getIndex());
-    }
-
     /**
-     * Установка значения оси абсцисс (X).
+     * Установка значения по оси абсцисс (x).
      *
-     * @param x Значение оси абсцисс (X)
+     * @param x Значение по оси абсцисс (x)
      * @return Этот же вектор.
      */
     public Vector2D setX(double x) {
@@ -174,9 +126,9 @@ public class Vector2D implements Vector {
     }
 
     /**
-     * Установка значения оси ординат (Y).
+     * Установка значения по оси ординат (y).
      *
-     * @param y Значение оси ординат (Y)
+     * @param y Значение по оси ординат (y)
      * @return Этот же вектор.
      */
     public Vector2D setY(double y) {
@@ -185,22 +137,17 @@ public class Vector2D implements Vector {
     }
 
     @Override
-    public Vector2D setAxis(int axis, double value) {
-        switch (axis) {
+    public Vector2D setIndex(int index, double value) {
+        switch (index) {
             case Axis.X_INDEX -> x = value;
             case Axis.Y_INDEX -> y = value;
-            default -> throw new WrongAxisIndexError(axis, this);
+            default -> throw new VectorIndexError(index);
         }
         return this;
     }
 
-    @Override
-    public Vector2D setAxis(Axis axis, double value) {
-        return setAxis(axis.getIndex(), value);
-    }
-
     /**
-     * Прибавление к значению оси абсцисс (X).
+     * Прибавление к значению по оси абсцисс (x).
      *
      * @param summand Слагаемое
      * @return Этот же вектор.
@@ -211,7 +158,7 @@ public class Vector2D implements Vector {
     }
 
     /**
-     * Прибавление к значению оси ординат (Y).
+     * Прибавление к значению по оси ординат (y).
      *
      * @param summand Слагаемое
      * @return Этот же вектор.
@@ -222,22 +169,17 @@ public class Vector2D implements Vector {
     }
 
     @Override
-    public Vector2D addAxis(int axis, double summand) {
-        switch (axis) {
+    public Vector2D addIndex(int index, double summand) {
+        switch (index) {
             case Axis.X_INDEX -> x += summand;
             case Axis.Y_INDEX -> y += summand;
-            default -> throw new WrongAxisIndexError(axis, this);
+            default -> throw new VectorIndexError(index);
         }
         return this;
     }
 
-    @Override
-    public Vector2D addAxis(Axis axis, double summand) {
-        return addAxis(axis.getIndex(), summand);
-    }
-
     /**
-     * Вычитание из значения оси абсцисс (X).
+     * Вычитание из значения по оси абсцисс (x).
      *
      * @param subtrahend Вычитаемое
      * @return Этот же вектор.
@@ -248,7 +190,7 @@ public class Vector2D implements Vector {
     }
 
     /**
-     * Вычитание из значения оси ординат (Y).
+     * Вычитание из значения по оси ординат (y).
      *
      * @param subtrahend Вычитаемое
      * @return Этот же вектор.
@@ -259,22 +201,17 @@ public class Vector2D implements Vector {
     }
 
     @Override
-    public Vector2D subtractAxis(int axis, double subtrahend) {
-        switch (axis) {
+    public Vector2D subtractIndex(int index, double subtrahend) {
+        switch (index) {
             case Axis.X_INDEX -> x -= subtrahend;
             case Axis.Y_INDEX -> y -= subtrahend;
-            default -> throw new WrongAxisIndexError(axis, this);
+            default -> throw new VectorIndexError(index);
         }
         return this;
     }
 
-    @Override
-    public Vector2D subtractAxis(Axis axis, double subtrahend) {
-        return subtractAxis(axis.getIndex(), subtrahend);
-    }
-
     /**
-     * Умножение значения оси абсцисс (X).
+     * Умножение значения по оси абсцисс (x).
      *
      * @param multiplier Множитель
      * @return Этот же вектор.
@@ -285,7 +222,7 @@ public class Vector2D implements Vector {
     }
 
     /**
-     * Умножение значения оси ординат (Y).
+     * Умножение значения по оси ординат (y).
      *
      * @param multiplier Множитель
      * @return Этот же вектор.
@@ -296,22 +233,17 @@ public class Vector2D implements Vector {
     }
 
     @Override
-    public Vector2D multipleAxis(int axis, double multiplier) {
-        switch (axis) {
+    public Vector2D multipleIndex(int index, double multiplier) {
+        switch (index) {
             case Axis.X_INDEX -> x *= multiplier;
             case Axis.Y_INDEX -> y *= multiplier;
-            default -> throw new WrongAxisIndexError(axis, this);
+            default -> throw new VectorIndexError(index);
         }
         return this;
     }
 
-    @Override
-    public Vector2D multipleAxis(Axis axis, double multiplier) {
-        return multipleAxis(axis.getIndex(), multiplier);
-    }
-
     /**
-     * Деление значения оси абсцисс (X).
+     * Деление значения по оси абсцисс (x).
      *
      * @param divisor Делитель
      * @return Этот же вектор.
@@ -322,7 +254,7 @@ public class Vector2D implements Vector {
     }
 
     /**
-     * Деление значения оси ординат (Y).
+     * Деление значения по оси ординат (y).
      *
      * @param divisor Делитель
      * @return Этот же вектор.
@@ -333,25 +265,20 @@ public class Vector2D implements Vector {
     }
 
     @Override
-    public Vector2D divideAxis(int axis, double divisor) {
-        switch (axis) {
+    public Vector2D divideIndex(int index, double divisor) {
+        switch (index) {
             case Axis.X_INDEX -> x /= divisor;
             case Axis.Y_INDEX -> y /= divisor;
-            default -> throw new WrongAxisIndexError(axis, this);
+            default -> throw new VectorIndexError(index);
         }
         return this;
     }
 
-    @Override
-    public Vector2D divideAxis(Axis axis, double divisor) {
-        return divideAxis(axis.getIndex(), divisor);
-    }
-
     /**
-     * Установка значений осей вектора.
+     * Установка значений вектора.
      *
-     * @param x Значение оси абсцисс (X)
-     * @param y Значение оси ординат (Y)
+     * @param x Значение по оси абсцисс (x)
+     * @param y Значение по оси ординат (y)
      * @return Этот же вектор.
      */
     public Vector2D set(double x, double y) {
@@ -367,16 +294,16 @@ public class Vector2D implements Vector {
             y = vector2D.y;
             return this;
         }
-        x = vector.getAxisOrZero(Axis.X_INDEX);
-        y = vector.getAxisOrZero(Axis.Y_INDEX);
+        if (vector.containsIndex(Axis.X_INDEX)) x = vector.getIndex(Axis.X_INDEX);
+        if (vector.containsIndex(Axis.Y_INDEX)) y = vector.getIndex(Axis.Y_INDEX);
         return this;
     }
 
     /**
-     * Прибавление к значениям осей вектора.
+     * Прибавление к значениям вектора.
      *
-     * @param summandX Слагаемое оси абсцисс (X)
-     * @param summandY Слагаемое оси ординат (Y)
+     * @param summandX Слагаемое по оси абсцисс (x)
+     * @param summandY Слагаемое по оси ординат (y)
      * @return Этот же вектор.
      */
     public Vector2D add(double summandX, double summandY) {
@@ -392,16 +319,16 @@ public class Vector2D implements Vector {
             y += summand2D.y;
             return this;
         }
-        x += summand.getAxisOrZero(Axis.X_INDEX);
-        y += summand.getAxisOrZero(Axis.Y_INDEX);
+        x += summand.getIndexOrZero(Axis.X_INDEX);
+        y += summand.getIndexOrZero(Axis.Y_INDEX);
         return this;
     }
 
     /**
-     * Вычитание из значений осей вектора.
+     * Вычитание из значений вектора.
      *
-     * @param subtrahendX Вычитаемое оси абсцисс (X)
-     * @param subtrahendY Вычитаемое оси ординат (Y)
+     * @param subtrahendX Вычитаемое по оси абсцисс (x)
+     * @param subtrahendY Вычитаемое по оси ординат (y)
      * @return Этот же вектор.
      */
     public Vector2D subtract(double subtrahendX, double subtrahendY) {
@@ -417,8 +344,8 @@ public class Vector2D implements Vector {
             y -= subtrahend2D.y;
             return this;
         }
-        x -= subtrahend.getAxisOrZero(Axis.X_INDEX);
-        y -= subtrahend.getAxisOrZero(Axis.Y_INDEX);
+        x -= subtrahend.getIndexOrZero(Axis.X_INDEX);
+        y -= subtrahend.getIndexOrZero(Axis.Y_INDEX);
         return this;
     }
 
@@ -437,6 +364,19 @@ public class Vector2D implements Vector {
     }
 
     @Override
+    public double length() {
+        return Math.sqrt(x * x + y * y);
+    }
+
+    @Override
+    public double distance(Vector vector) {
+        if (vector instanceof Vector2D vector2D) {
+            return Math.sqrt((x - vector2D.x) * (x - vector2D.x) + (y - vector2D.y) * (y - vector2D.y));
+        }
+        return Math.sqrt((x - vector.getIndexOrZero(Axis.X_INDEX)) * (x - vector.getIndexOrZero(Axis.X_INDEX)) + (y - vector.getIndexOrZero(Axis.Y_INDEX)) * (y - vector.getIndexOrZero(Axis.Y_INDEX)));
+    }
+
+    @Override
     public Vector2D normalize() {
         double length = length();
         x /= length;
@@ -451,105 +391,35 @@ public class Vector2D implements Vector {
     }
 
     @Override
-    public double length() {
-        return Math.sqrt(x * x + y * y);
+    public Vector2D vectorTo(Vector vector) {
+        if (vector instanceof Vector2D vector2D) {
+            return new Vector2D(vector2D.x - x, vector2D.y - y);
+        }
+        return new Vector2D(vector.getIndexOrZero(Axis.X_INDEX) - x, vector.getIndexOrZero(Axis.Y_INDEX) - y);
     }
 
     @Override
-    public double distance(Vector vector) {
-        if (vector instanceof Vector2D vector2D) {
-            return Math.sqrt((x - vector2D.x) * (x - vector2D.x) + (y - vector2D.y) * (y - vector2D.y));
-        }
-        if (vector.getSize() == SIZE) {
-            return Math.sqrt((x - vector.getAxis(Axis.X_INDEX)) * (x - vector.getAxis(Axis.X_INDEX)) + (y - vector.getAxis(Axis.Y_INDEX)) * (y - vector.getAxis(Axis.Y_INDEX)));
-        }
-        throw new VectorSizeIncompatibilityError(this, vector);
-    }
-
-    /**
-     * Вычисление угла вектора в радианах.
-     * В отличие от метода {@link Math#atan2(double, double)},
-     * этот метод возвращает радианы по всей окружности, от 0 до 2π.
-     *
-     * @return Угол вектора в радианах.
-     * @see Vector2D#angleDegrees()
-     */
-    public double angle() {
-        double angle = Math.atan2(y, x);
-        if (angle >= 0) return angle;
-        return Math.TAU + angle;
-    }
-
-    /**
-     * Вычисление угла вектора в градусах.
-     * В отличие от метода {@link Math#atan2(double, double)},
-     * этот метод возвращает градусы по всей окружности, от 0 до 360.
-     *
-     * @return Угол вектора в градусах.
-     * @see Vector2D#angle()
-     */
-    public double angleDegrees() {
-        return Math.toDegrees(angle());
-    }
-
-    // TODO 10.11.2024: При расчёте угла от вектора (1, 1) до вектора (100, 1) угол рассчитывается как 360°, а не 0°
-
-    /**
-     * Вычисление угла поворота до другого вектора в радианах.
-     *
-     * @param vector Вектор, поворот до которого будет рассчитан
-     * @return Угол поворота до вектора в радианах.
-     * @see Vector2D#angleDegreesTo(Vector)
-     */
-    public double angleTo(Vector vector) {
-        if (vector.getSize() == SIZE) {
-            Vector2D difference = clone().subtract(vector);
-            return Math.PI + Math.atan2(difference.getY(), difference.getX());
-        }
-        throw new VectorSizeIncompatibilityError(this, vector);
-    }
-
-    /**
-     * Вычисление угла поворота до другого вектора в градусах.
-     *
-     * @param vector Вектор, поворот до которого будет рассчитан
-     * @return Угол поворота до вектора в градусах.
-     * @see Vector2D#angleTo(Vector)
-     */
-    public double angleDegreesTo(Vector vector) {
-        if (vector.getSize() == SIZE) {
-            Vector2D difference = clone().subtract(vector);
-            return 180 + Math.toDegrees(Math.atan2(difference.getY(), difference.getX()));
-        }
-        throw new VectorSizeIncompatibilityError(this, vector);
-    }
-
-    /**
-     * Вычисление направления до вектора.
-     * Представляет собой следующий алгоритм: из целевого вектора вычитается текущий,
-     * затем результат нормализуется.
-     *
-     * @param vector Целевой вектор
-     * @return Направление до вектора.
-     */
     public Vector2D directionTo(Vector vector) {
-        if (vector.getSize() == SIZE) {
-            return new Vector2D(vector.getAxis(Axis.X_INDEX) - x, vector.getAxis(Axis.Y_INDEX) - y).normalize();
+        if (vector instanceof Vector2D vector2D) {
+            return new Vector2D(vector2D.x - x, vector2D.y - y).normalize();
         }
-        throw new VectorSizeIncompatibilityError(this, vector);
+        return new Vector2D(vector.getIndexOrZero(Axis.X_INDEX) - x, vector.getIndexOrZero(Axis.Y_INDEX) - y).normalize();
     }
 
-    /**
-     * Вычисление вектора до целевого вектора.
-     * Представляет собой следующий алгоритм: из целевого вектора вычитается текущий.
-     *
-     * @param vector Целевой вектор.
-     * @return Вектор до целевого вектора.
-     */
-    public Vector2D vectorTo(Vector vector) {
-        if (vector.getSize() == SIZE) {
-            return new Vector2D(vector.getAxis(Axis.X_INDEX) - x, vector.getAxis(Axis.Y_INDEX) - y);
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Vector vector)) return false;
+        if (vector instanceof Vector2D vector2D) {
+            return x == vector2D.x && y == vector2D.y;
         }
-        throw new VectorSizeIncompatibilityError(this, vector);
+        if (vector.containsIndex(Axis.X_INDEX) && vector.containsIndex(Axis.Y_INDEX)) {
+            return x == vector.getIndex(Axis.X_INDEX) && y == vector.getIndex(Axis.Y_INDEX);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 }

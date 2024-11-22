@@ -2,53 +2,29 @@ package ru.vladislav117.vectors;
 
 /**
  * Ось.
+ * <p>
+ * (На данный момент этот класс находится в разработке, сейчас он нужен для хранения индексов осей).
+ * </p>
  */
 public class Axis {
     /**
-     * Индекс оси абсцисс (X).
+     * Индекс оси абсцисс (x).
      */
     public static final int X_INDEX = 0;
     /**
-     * Индекс оси ординат (Y).
+     * Индекс оси ординат (y).
      */
     public static final int Y_INDEX = 1;
     /**
-     * Индекс оси аппликат (Z).
+     * Индекс оси аппликат (z).
      */
     public static final int Z_INDEX = 2;
     /**
-     * Ось абсцисс (X).
+     * Индекс оси w.
      */
-    public static Axis X = new Axis(X_INDEX);
+    public static final int W_INDEX = 3;
     /**
-     * Ось ординат (Y).
+     * Индекс оси v.
      */
-    public static Axis Y = new Axis(Y_INDEX);
-    /**
-     * Ось аппликат (Z).
-     */
-    public static Axis Z = new Axis(Z_INDEX);
-
-    /**
-     * Индекс оси.
-     */
-    protected final int index;
-
-    /**
-     * Создание оси.
-     *
-     * @param index Индекс оси
-     */
-    public Axis(int index) {
-        this.index = index;
-    }
-
-    /**
-     * Получение индекса оси.
-     *
-     * @return Индекс оси.
-     */
-    public int getIndex() {
-        return index;
-    }
+    public static final int V_INDEX = 4;
 }
