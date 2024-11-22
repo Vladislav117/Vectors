@@ -406,6 +406,51 @@ public class Vector2D implements Vector {
         return new Vector2D(vector.getIndexOrZero(Axis.X_INDEX) - x, vector.getIndexOrZero(Axis.Y_INDEX) - y).normalize();
     }
 
+    /**
+     * Вычисление угла вектора в радианах.
+     * В отличие от метода {@link Math#atan2(double, double)},
+     * этот метод возвращает радианы по всей окружности, от 0 до 2π.
+     *
+     * @return Угол вектора в радианах.
+     */
+    public double angle() {
+        double angle = Math.atan2(y, x);
+        if (angle >= 0) return angle;
+        return Math.TAU + angle;
+    }
+    /**
+     * Вычисление угла вектора в градусах.
+     * В отличие от метода {@link Math#atan2(double, double)},
+     * этот метод возвращает градусы по всей окружности, от 0 до 360.
+     *
+     * @return Угол вектора в градусах.
+     */
+    public double angleDegrees() {
+        return Math.toDegrees(angle());
+    }
+
+    // TODO 10.11.2024: При расчёте угла от вектора (1, 1) до вектора (100, 1) угол рассчитывается как 360°, а не 0°
+    /**
+     * Вычисление угла поворота до другого вектора в радианах.
+     *
+     * @param vector Вектор, поворот до которого будет рассчитан
+     * @return Угол поворота до вектора в радианах.
+     */
+    public double angleTo(Vector vector) {
+        Vector2D difference = clone().subtract(vector);
+        return Math.PI + Math.atan2(difference.getY(), difference.getX());
+    }
+    /**
+     * Вычисление угла поворота до другого вектора в градусах.
+     *
+     * @param vector Вектор, поворот до которого будет рассчитан
+     * @return Угол поворота до вектора в градусах.
+     */
+    public double angleDegreesTo(Vector vector) {
+        Vector2D difference = clone().subtract(vector);
+        return 180 + Math.toDegrees(Math.atan2(difference.getY(), difference.getX()));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Vector vector)) return false;

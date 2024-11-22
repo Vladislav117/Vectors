@@ -214,4 +214,60 @@ public class Vector2DTests {
         Assertions.assertNotEquals(vector, other2);
         Assertions.assertNotEquals(vector, other1D);
     }
+
+    @Test
+    public void angleTest() {
+        Vector2D vector;
+        Vector2D other;
+        vector = new Vector2D(1, 1);
+        other = new Vector2D(2, 2);
+        Assertions.assertEquals(Math.PI / 4, vector.angleTo(other));
+        Assertions.assertEquals(45, vector.angleDegreesTo(other));
+        vector = new Vector2D(1, 1);
+        other = new Vector2D(-2, -2);
+        Assertions.assertEquals(5 * Math.PI / 4, vector.angleTo(other));
+        Assertions.assertEquals(225, vector.angleDegreesTo(other));
+        vector = new Vector2D(1, 1);
+        other = new Vector2D(1, 100);
+        Assertions.assertEquals(Math.PI / 2, vector.angleTo(other));
+        Assertions.assertEquals(90, vector.angleDegreesTo(other));
+        vector = new Vector2D(1, 1);
+        other = new Vector2D(1, -100);
+        Assertions.assertEquals(3 * Math.PI / 2, vector.angleTo(other));
+        Assertions.assertEquals(270, vector.angleDegreesTo(other));
+        vector = new Vector2D(1, 1);
+        other = new Vector2D(1, 1);
+        Assertions.assertEquals(Math.PI, vector.angleTo(other));
+        Assertions.assertEquals(180, vector.angleDegreesTo(other));
+        vector = new Vector2D(1, 1);
+        other = new Vector2D(-100, 1);
+        Assertions.assertEquals(Math.PI, vector.angleTo(other));
+        Assertions.assertEquals(180, vector.angleDegreesTo(other));
+        vector = new Vector2D(1, 1);
+        other = new Vector2D(100, 1);
+        Assertions.assertEquals(Math.PI * 2, vector.angleTo(other));
+        Assertions.assertEquals(360, vector.angleDegreesTo(other));
+
+        vector = new Vector2D(1, 1);
+        Assertions.assertEquals(Math.PI / 4, vector.angle());
+        Assertions.assertEquals(45, vector.angleDegrees());
+        vector = new Vector2D(-1, 1);
+        Assertions.assertEquals(3 * Math.PI / 4, vector.angle());
+        Assertions.assertEquals(135, vector.angleDegrees());
+        vector = new Vector2D(-1, -1);
+        Assertions.assertEquals(5 * Math.PI / 4, vector.angle());
+        Assertions.assertEquals(225, vector.angleDegrees());
+        vector = new Vector2D(1, -1);
+        Assertions.assertEquals(7 * Math.PI / 4, vector.angle());
+        Assertions.assertEquals(315, vector.angleDegrees());
+        vector = new Vector2D(0, 0);
+        Assertions.assertEquals(0, vector.angle());
+        Assertions.assertEquals(0, vector.angleDegrees());
+        vector = new Vector2D(0, 1);
+        Assertions.assertEquals(Math.PI / 2, vector.angle());
+        Assertions.assertEquals(90, vector.angleDegrees());
+        vector = new Vector2D(0, -1);
+        Assertions.assertEquals(3 * Math.PI / 2, vector.angle());
+        Assertions.assertEquals(270, vector.angleDegrees());
+    }
 }
