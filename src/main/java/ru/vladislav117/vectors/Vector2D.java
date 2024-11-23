@@ -418,6 +418,7 @@ public class Vector2D implements Vector {
         if (angle >= 0) return angle;
         return Math.TAU + angle;
     }
+
     /**
      * Вычисление угла вектора в градусах.
      * В отличие от метода {@link Math#atan2(double, double)},
@@ -430,6 +431,7 @@ public class Vector2D implements Vector {
     }
 
     // TODO 10.11.2024: При расчёте угла от вектора (1, 1) до вектора (100, 1) угол рассчитывается как 360°, а не 0°
+
     /**
      * Вычисление угла поворота до другого вектора в радианах.
      *
@@ -440,6 +442,7 @@ public class Vector2D implements Vector {
         Vector2D difference = clone().subtract(vector);
         return Math.PI + Math.atan2(difference.getY(), difference.getX());
     }
+    
     /**
      * Вычисление угла поворота до другого вектора в градусах.
      *
