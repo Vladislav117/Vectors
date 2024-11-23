@@ -56,6 +56,50 @@ public class Vector2D implements Vector {
         y = 0;
     }
 
+    /**
+     * Создание вектора из угла и длины.
+     *
+     * @param angle  Угол в радианах
+     * @param length Длина
+     * @return Созданный вектор.
+     */
+    public static Vector2D fromAngle(double angle, double length) {
+        return new Vector2D(Math.cos(angle) * length, Math.sin(angle) * length);
+    }
+
+    /**
+     * Создание вектора из угла с единичной длиной.
+     *
+     * @param angle Угол в радианах
+     * @return Созданный вектор.
+     */
+    public static Vector2D fromAngle(double angle) {
+        return new Vector2D(Math.cos(angle), Math.sin(angle));
+    }
+
+    /**
+     * Создание вектора из угла и длины.
+     *
+     * @param angle  Угол в градусах
+     * @param length Длина
+     * @return Созданный вектор.
+     */
+    public static Vector2D fromAngleDegrees(double angle, double length) {
+        angle = Math.toRadians(angle);
+        return new Vector2D(Math.cos(angle) * length, Math.sin(angle) * length);
+    }
+
+    /**
+     * Создание вектора из угла с единичной длиной.
+     *
+     * @param angle Угол в градусах
+     * @return Созданный вектор.
+     */
+    public static Vector2D fromAngleDegrees(double angle) {
+        angle = Math.toRadians(angle);
+        return new Vector2D(Math.cos(angle), Math.sin(angle));
+    }
+
     @Override
     public Vector2D clone() {
         try {
@@ -442,7 +486,7 @@ public class Vector2D implements Vector {
         Vector2D difference = clone().subtract(vector);
         return Math.PI + Math.atan2(difference.getY(), difference.getX());
     }
-    
+
     /**
      * Вычисление угла поворота до другого вектора в градусах.
      *

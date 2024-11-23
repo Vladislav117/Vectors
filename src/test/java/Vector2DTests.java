@@ -46,6 +46,18 @@ public class Vector2DTests {
 
         vector = new Vector2D();
         assertVector(vector, 0, 0);
+
+        vector = Vector2D.fromAngle(Math.PI / 2, 2);
+        assertVector(vector, 0, 2);
+
+        vector = Vector2D.fromAngle(Math.PI);
+        assertVector(vector, -1, 0);
+
+        vector = Vector2D.fromAngleDegrees(45, 2);
+        assertVector(vector, Math.sqrt(2), Math.sqrt(2));
+
+        vector = Vector2D.fromAngleDegrees(-90);
+        assertVector(vector, 0, -1);
     }
 
     @Test
